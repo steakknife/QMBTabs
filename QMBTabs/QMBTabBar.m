@@ -15,6 +15,14 @@
 
 @property (nonatomic, strong) UIView *highlightBar;
 @property (nonatomic, strong) QMBTab *selectedTab;
+/*
+ * > 0 stacks tabs to the right, at the end of the last tab
+ * < 0 stacks tabs to the left, next to other tabs
+ *
+ * Default is 2
+ *
+ */
+@property (nonatomic) CGFloat stackedTabOffset;
 @end
 
 
@@ -31,6 +39,7 @@ static float highlightBarHeight = 5.0f;
         self.delegate = self;
         
         _items = [NSMutableArray array];
+        _stackedTabOffset = 2;
         _activeTabIndex = 0;
         
         currentTabItemWidth = qmbMaxTabWidth;
@@ -142,7 +151,7 @@ static float highlightBarHeight = 5.0f;
 - (float) calcXPostionOfTab:(QMBTab *)tab withIndex:(int)index withTabCount:(int)count
 {
     // stacked tab shift
-    int stackedTabOffset = ((count-1) - index) * 2.0f;
+    int stackedTabOffset = ((count-1) - index) * self.stackedTabOffset;
     if (tab.orgFrame.origin.x <= self.contentOffset.x) {
         // dont go too far left
         //NSLog(@"1: %f",self.contentOffset.x);

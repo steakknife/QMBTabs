@@ -35,16 +35,11 @@
 
 @interface QMBTabViewController : UIViewController<QMBTabBarDelegate>
 
-@property(nonatomic,strong, readonly) NSMutableArray *viewControllers;
-
+@property (nonatomic, strong, readonly) NSMutableArray *viewControllers;
 @property (nonatomic, strong) QMBTabsAppearance *appearance;
-
-@property(nonatomic,assign) UIViewController *selectedViewController;
-
-@property(nonatomic,strong, readonly) QMBTabBar *tabBar;
-
-@property(nonatomic,assign) id<QMBTabViewControllerDelegate> delegate;
-
+@property (nonatomic, assign) UIViewController *selectedViewController;
+@property (nonatomic, strong, readonly) QMBTabBar *tabBar;
+@property (nonatomic, assign) id<QMBTabViewControllerDelegate> delegate;
 
 - (void)addViewController:(UIViewController *)controller;
 - (void)addViewController:(UIViewController *)controller withCompletion:(void (^)(QMBTab *tabItem))completition;

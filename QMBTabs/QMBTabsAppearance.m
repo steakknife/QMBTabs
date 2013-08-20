@@ -10,7 +10,7 @@
 
 @implementation QMBTabsAppearance
 
-- (QMBTabsAppearance *)init {
+- (QMBTabsAppearance *) init {
     self = [super init];
     if (self) {
         [self setDefaults];
@@ -19,7 +19,7 @@
     return self;
 }
 
-- (void)setDefaults {
+- (void) setDefaults {
     _tabLabelColorDisabled = [UIColor lightGrayColor];
     _tabLabelColorEnabled = [UIColor darkGrayColor];
     _tabLabelColorHighlighted = [UIColor whiteColor];
@@ -56,7 +56,7 @@
     _tabBarBackgroundColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
     _tabBarHighlightColor = _tabBackgroundColorHighlighted;
     _tabBarStrokeHighlightColor = _tabStrokeColorHighlighted;
-    
+        
 }
 
 

@@ -15,7 +15,6 @@
 @protocol QMBTabBarDelegate <NSObject>
 
 - (void) tabBar:(QMBTabBar *)tabBar didChangeTabItem:(QMBTab *)tab;
-
 - (void) tabBar:(QMBTabBar *)tabBar willRemoveTabItem:(QMBTab *)tab;
 - (void) tabBar:(QMBTabBar *)tabBar didRemoveTabItem:(QMBTab *)tab;
 

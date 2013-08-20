@@ -8,7 +8,7 @@
 
 #import "QMBTabBar.h"
 
-@interface QMBTabBar (){
+@interface QMBTabBar () {
     int _activeTabIndex;
     float firstX, firstY, prevX, currentTabItemWidth;
 }
@@ -24,7 +24,7 @@ static float highlightBarHeight = 5.0f;
 
 @implementation QMBTabBar
 
-- (id)initWithFrame:(CGRect)frame
+- (id) initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -44,13 +44,8 @@ static float highlightBarHeight = 5.0f;
     return self;
 }
 
-
-
-
 - (void) addTabItemWithCompletition:(void (^)(QMBTab *tabItem))completition
 {
-    
-   
     QMBTab *tabItem = [[QMBTab alloc] initWithFrame:CGRectMake([_items count] * currentTabItemWidth, 0, 0, self.frame.size.height-highlightBarHeight)];
     [tabItem setAppearance:self.appearance];
     tabItem.titleLabel.text = NSLocalizedString(@"New tab", @"QMBTabBar New Tab Title");
@@ -63,7 +58,6 @@ static float highlightBarHeight = 5.0f;
     [_items addObject:tabItem];
 
     [self addSubview:tabItem];
-    
     
     [UIView animateWithDuration:0.5
                           delay:0.0
@@ -79,7 +73,6 @@ static float highlightBarHeight = 5.0f;
 
 - (void) rearrangeTabs
 {
-    
     currentTabItemWidth = qmbMaxTabWidth;
     
     int i = 0;
@@ -113,8 +106,6 @@ static float highlightBarHeight = 5.0f;
     
     [self bringSubviewToFront:_highlightBar];
     [self bringSubviewToFront:_selectedTab];
-
-    
 }
 
 - (NSUInteger) indexForTabItem:(QMBTab *)tabItem
@@ -130,24 +121,20 @@ static float highlightBarHeight = 5.0f;
     return -1;
 }
 
-- (QMBTab *)tabItemForIndex:(int)index
+- (QMBTab *) tabItemForIndex:(int)index
 {
     return [_items objectAtIndex:index];
 }
 
 #pragma mark - ScrollView Delegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
-   
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView
+{
     for (QMBTab *tab in _items) {
-        
         CGRect frame = tab.frame;
         frame.origin.x = [self calcXPostionOfTab:tab];
         tab.frame = frame;
-        
-    }
-    
+    }    
 }
 
 - (float) calcXPostionOfTab:(QMBTab *)tab
@@ -163,7 +150,8 @@ static float highlightBarHeight = 5.0f;
     }
 }
 
-- (void)drawRect:(CGRect)rect{
+- (void) drawRect:(CGRect)rect
+{
     
     [super drawRect:rect];
         
@@ -182,7 +170,8 @@ static float highlightBarHeight = 5.0f;
     [self bringSubviewToFront:_highlightBar];
 }
 
-- (void)layoutSubviews{
+- (void) layoutSubviews
+{
     [super layoutSubviews];
     
     [self rearrangeTabs];
@@ -192,10 +181,10 @@ static float highlightBarHeight = 5.0f;
    
 }
 
-- (void) selectTab:(QMBTab *)tab{
+- (void) selectTab:(QMBTab *)tab
+{
     
-    int i =0;
-    
+    int i = 0;
     
     for (QMBTab *tabItem in _items) {
         if (tab == tabItem){
@@ -212,28 +201,29 @@ static float highlightBarHeight = 5.0f;
     
     [self bringSubviewToFront:_highlightBar];
     [self bringSubviewToFront:_selectedTab];
-    
 }
 
 #pragma mark - QMBTab Delegate
 
-- (void)didSelectTab:(QMBTab *)tab{
-    
-    
-    if ([self.tabBarDelegeate respondsToSelector:@selector(tabBar:didChangeTabItem:)]){
+- (void) didSelectTab:(QMBTab *)tab
+{
+    if ([self.tabBarDelegeate respondsToSelector:@selector(tabBar:didChangeTabItem:)])
+    {
         [self.tabBarDelegeate performSelector:@selector(tabBar:didChangeTabItem:) withObject:self withObject:tab];
     }
 }
 
-- (void)tab:(QMBTab *)tab didSelectCloseButton:(UIButton *)button{
+- (void) tab:(QMBTab *)tab didSelectCloseButton:(UIButton *)button
+{
     
     [self removeTabItem:tab];
     
 }
 
-- (void)removeTabItem:(QMBTab *)tab
+- (void) removeTabItem:(QMBTab *)tab
 {
-    if ([self.tabBarDelegeate respondsToSelector:@selector(tabBar:willRemoveTabItem:)]){
+    if ([self.tabBarDelegeate respondsToSelector:@selector(tabBar:willRemoveTabItem:)])
+    {
         [self.tabBarDelegeate performSelector:@selector(tabBar:willRemoveTabItem:) withObject:self withObject:tab];
     }
     
@@ -250,7 +240,8 @@ static float highlightBarHeight = 5.0f;
                          
                      }];
     
-    if ([self.tabBarDelegeate respondsToSelector:@selector(tabBar:didRemoveTabItem:)]){
+    if ([self.tabBarDelegeate respondsToSelector:@selector(tabBar:didRemoveTabItem:)])
+    {
         [self.tabBarDelegeate performSelector:@selector(tabBar:didRemoveTabItem:) withObject:self withObject:tab];
     }
 }

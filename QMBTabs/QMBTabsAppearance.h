@@ -49,4 +49,8 @@
 @property (nonatomic,strong) UIColor *tabBarHighlightColor;
 @property (nonatomic,strong) UIColor *tabBarStrokeHighlightColor;
 
+// Badges
+@property (nonatomic,strong) UIColor *badgeTextColor;
+@property (nonatomic,strong) UIColor *badgeBackgroundColor;
+
 @end

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "QMBTabsAppearance.h"
+#import "QMBNumericBadgeView.h"
 
 @class QMBTab;
 
@@ -21,6 +22,9 @@
 @end
 
 @interface QMBTab : UIView
+
+@property (nonatomic, readonly) QMBNumericBadgeView *badge;
+
 @property (nonatomic, assign) id<QMBTabDelegate> delegate;
 
 @property (nonatomic, assign, setter = setHighlighted:) BOOL highlighted;

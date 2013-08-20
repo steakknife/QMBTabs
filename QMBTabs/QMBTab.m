@@ -7,7 +7,7 @@
 //
 
 #import "QMBTab.h"
-
+#import "QMBNumericBadgeView.h"
 @interface QMBTab ()
 
 
@@ -15,10 +15,9 @@
 
 @implementation QMBTab
 
-- (id)initWithFrame:(CGRect)frame
+- (id) initWithFrame:(CGRect)frame
 {
-	self = [super initWithFrame:frame];
-	if (self) {
+	if (self = [super initWithFrame:frame]) {
         _orgFrame = frame;
 		_closable = YES;
         
@@ -32,7 +31,7 @@
         [self addGestureRecognizer:tapGesture];
         
         // title label
-        if (!self.titleLabel){
+        if (!self.titleLabel) {
             UILabel *titleLabel = [[UILabel alloc] init];
             [titleLabel setText:NSLocalizedString(@"New tab is what it is", nil)];
             [titleLabel setBackgroundColor:[UIColor clearColor]];
@@ -40,24 +39,28 @@
             [self addSubview:self.titleLabel];
         }
         
+        if (!_badge) {
+            _badge = [[QMBNumericBadgeView alloc] init];
+            [self insertSubview:_badge aboveSubview:self];
+        }
+
         // close button
-        if (!self.closeButton){
+        if (!self.closeButton) {
             
         }
         
         // icon image view
-        if (!self.iconImageView){
+        if (!self.iconImageView) {
             UIImageView *iconImageView = [[UIImageView alloc] init];
             [self addSubview:iconImageView];
             self.iconImageView = iconImageView;
         }
-        
-
 	}
     
 	return self;
 }
-- (void)setInnerBackgroundColor:(UIColor *)color
+
+- (void) setInnerBackgroundColor:(UIColor *)color
 {
 	if ([_innerBackgroundColor isEqual:color]) {
 		return;
@@ -66,7 +69,7 @@
 	[self setNeedsDisplay];
 }
 
-- (void)setForegroundColor:(UIColor *)color
+- (void) setForegroundColor:(UIColor *)color
 {
 	if ([_foregroundColor isEqual:color]) {
 		return;
@@ -75,15 +78,16 @@
 	[self setNeedsDisplay];
 }
 
-
-- (void)drawRect:(CGRect)rect
+- (void) drawRect:(CGRect)rect
 {
-    
-    if (!_innerBackgroundColor){
+    if (self.hidden) {
+        return;
+    }
+    if (!_innerBackgroundColor) {
         [self setInnerBackgroundColor:self.appearance.tabBackgroundColorEnabled];
     }
     
-    if (!self.normalColor){
+    if (!self.normalColor) {
         self.normalColor = self.appearance.tabBackgroundColorEnabled;
         self.highlightColor = self.appearance.tabBackgroundColorHighlighted;
     }
@@ -106,7 +110,7 @@
     CGFloat qmbTabIconMargin = 3.0f;
     
     
-    if (!self.closeButton){
+    if (!self.closeButton) {
         UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [closeButton setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin];
         [closeButton addTarget:self action:@selector(closeButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
@@ -180,7 +184,7 @@
         [self.titleLabel setTextColor:self.appearance.tabLabelColorHighlighted];
         
         // tab default icon
-        if(self.appearance.tabDefaultIconHighlightedImage) {
+        if (self.appearance.tabDefaultIconHighlightedImage) {
             [self.iconImageView setFrame:CGRectMake(qmbTabSideOffset + qmbTabCurvature,
                                                     (qmbTabHeight - (self.appearance.tabDefaultIconHighlightedImage).size.height) / 2 + qmbTabTopOffset,
                                                     (self.appearance.tabDefaultIconHighlightedImage).size.width, (self.appearance.tabDefaultIconHighlightedImage).size.height)];
@@ -190,7 +194,7 @@
         }
         
         // tab icon
-        if(self.iconHighlightedImage) {
+        if (self.iconHighlightedImage) {
             [self.iconImageView setFrame:CGRectMake(qmbTabSideOffset + qmbTabCurvature,
                                                     (qmbTabHeight - (self.iconHighlightedImage).size.height) / 2 + qmbTabTopOffset,
                                                     (self.iconHighlightedImage).size.width, (self.iconHighlightedImage).size.height)];
@@ -202,15 +206,14 @@
         [self.titleLabel setFrame:CGRectMake(qmbTabSideOffset + qmbTabCurvature + qmbTabIconWidth, 3.0f,
                                              qmbTabWidth - 2*qmbTabSideOffset - 2*qmbTabCurvature - (_closable ? self.closeButton.frame.size.width + qmbTabIconMargin : 0.0f) - qmbTabIconWidth, self.frame.size.height)];
         
-    }else {
-        
+    } else {
         
         // set font and color of the title label
         [self.titleLabel setFont:self.appearance.tabLabelFontEnabled];
         [self.titleLabel setTextColor:self.appearance.tabLabelColorEnabled];
         
         // tab default icon
-        if(self.appearance.tabDefaultIconImage) {
+        if (self.appearance.tabDefaultIconImage) {
             [self.iconImageView setFrame:CGRectMake(qmbTabSideOffset + qmbTabCurvature,
                                                     (qmbTabHeight - (self.appearance.tabDefaultIconImage).size.height) / 2 + qmbTabTopOffset,
                                                     (self.appearance.tabDefaultIconImage).size.width, (self.appearance.tabDefaultIconImage).size.height)];
@@ -220,7 +223,7 @@
         }
         
         // tab icon
-        if(self.iconImage) {
+        if (self.iconImage) {
             [self.iconImageView setFrame:CGRectMake(qmbTabSideOffset + qmbTabCurvature,
                                                     (qmbTabHeight - (self.iconImage).size.height) / 2 + qmbTabTopOffset,
                                                     (self.iconImage).size.width, (self.iconImage).size.height)];
@@ -240,37 +243,48 @@
     [self setBackgroundColor:[UIColor clearColor]];
 }
 
-- (void)layoutSubviews{
+- (void) layoutSubviews
+{
     [super layoutSubviews];
+    // Position to the right upper corner
+    if (CGRectIsEmpty(self.frame) == NO && CGRectIsEmpty(self.badge.frame) == NO) {
+        // Badge on upper left corner of tab
+        self.badge.frame = CGRectMake(
+                self.appearance.tabTopOffset - self.badge.frame.size.width / 2,
+                - self.badge.frame.size.height / 4,
+                self.badge.frame.size.width,
+                self.badge.frame.size.height
+        );
+    } else {
+        self.badge.hidden = YES;
+    }
 }
 
 - (void) setHighlighted:(BOOL)highlighted
 {
     if (highlighted){
         [self setInnerBackgroundColor:self.appearance.tabBackgroundColorHighlighted];
-    }else {
+    } else {
         [self setInnerBackgroundColor:self.appearance.tabBackgroundColorEnabled];
     }
     
     _highlighted = highlighted;
-    
 }
 
 #pragma mark - Gesture
 
 - (void) didTap:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(didSelectTab:)]){
+    if ([self.delegate respondsToSelector:@selector(didSelectTab:)]) {
         [self.delegate performSelector:@selector(didSelectTab:) withObject:self];
     }
 }
 
 - (void) closeButtonTouchUpInside:(UIButton *)closeButton
 {
-    if ([self.delegate respondsToSelector:@selector(tab:didSelectCloseButton:)]){
+    if ([self.delegate respondsToSelector:@selector(tab:didSelectCloseButton:)]) {
         [self.delegate performSelector:@selector(tab:didSelectCloseButton:) withObject:self withObject:closeButton];
     }
 }
-
 
 @end

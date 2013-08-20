@@ -27,11 +27,19 @@
         UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SampleTabItemViewController"];
         [self addViewController:viewController withCompletion:^(QMBTab *tabItem) {
             tabItem.titleLabel.text = [NSString stringWithFormat:@"Hello I'm a Tab! %d", i];
+            tabItem.badge.count = 90; // prove that badges can be hidden
+            tabItem.badge.count = 0;
+            if (i == 3) {
+                tabItem.badge.maxCount = 0; // no maximum count
+                tabItem.badge.count = 561234;
+                tabItem.badge.countRoundingMultiple = 1000;
+            }
         }];
     }
-    
+ 
     [self addViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"SampleTabItemViewController"] withCompletion:^(QMBTab *tabItem) {
         tabItem.titleLabel.text = @"Printer!";
+        tabItem.badge.count = 1000; // show 999+
         
         tabItem.iconImage = [UIImage imageNamed:@"monotone_printer_hardware.png"];
         tabItem.iconHighlightedImage = [UIImage imageNamed:@"monotone_printer_hardware-highlight.png"];
@@ -40,6 +48,7 @@
     [self addViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"SampleTabItemViewController"] withCompletion:^(QMBTab *tabItem) {
         tabItem.titleLabel.text = @"Hello I'm a nonclosable Tab!";
         tabItem.closable = NO;
+        tabItem.badge.text = @"New";
         
         tabItem.iconImage = [UIImage imageNamed:@"monotone_wrench_settings.png"];
         tabItem.iconHighlightedImage = [UIImage imageNamed:@"monotone_wrench_settings-highlight.png"];
@@ -49,9 +58,7 @@
     [self addViewController:removeController withCompletion:^(QMBTab *tabItem) {
         tabItem.titleLabel.text = @"To Delete";
     }];
-    [self removeViewController:removeController];
-    
-    
+    [self removeViewController:removeController];    
 }
 
 #pragma mark - QMBTabViewController Delegate
@@ -88,7 +95,13 @@
 
 - (void)tabViewController:(QMBTabViewController *)tabViewController didSelectViewController:(UIViewController *)viewController
 {
-    NSLog(@"Tab Changed to %d", [tabViewController indexForViewController:viewController]);
+    NSUInteger tabIndex = [tabViewController indexForViewController:viewController];
+    NSLog(@"Tab Changed to %d", tabIndex);
+    QMBTab *tab = (QMBTab*)self.tabBar.items[tabIndex];
+    if ([tab.badge.text isEqual:@"New"]) {
+        tab.badge.text = @"";
+        NSLog(@"cleared baddge on tab %d", tabIndex);
+    }
 }
 
 - (BOOL)tabViewController:(QMBTabViewController *)tabViewController shouldSelectViewController:(UIViewController *)viewController

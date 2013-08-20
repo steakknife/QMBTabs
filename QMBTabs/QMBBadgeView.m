@@ -115,7 +115,6 @@ void DrawRoundedRect(CGContextRef context, CGRect rect, CGFloat radius)
 
 - (CGSize) sizeThatFits:(CGSize)size
 {
- //   NSLog(@"sizeThatFits text=%@ hidden=%d", self.textLabel.text, self.hidden);
     if (self.hidden) {
         return CGSizeMake(0.0f, 0.0f);
     }
@@ -125,7 +124,6 @@ void DrawRoundedRect(CGContextRef context, CGRect rect, CGFloat radius)
 
 - (void) willMoveToSuperview:(UIView *)newSuperview
 {
- //   NSLog(@"willMoveToSuperview");
 	[super willMoveToSuperview:newSuperview];
 	
 	if (newSuperview) {
@@ -147,13 +145,6 @@ void DrawRoundedRect(CGContextRef context, CGRect rect, CGFloat radius)
     [self setNeedsDisplay];
 }
 
-- (void) setHidden:(BOOL)hidden
-{
-    //bool redisplay = (hidden != self.hidden);
-    [super setHidden:hidden];
-    [self setNeedsDisplay];
-}
-
 - (NSString*) text
 {
     return self.textLabel.text;
@@ -163,7 +154,6 @@ void DrawRoundedRect(CGContextRef context, CGRect rect, CGFloat radius)
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-
 	if (object == _textLabel && [keyPath isEqualToString:@"text"]) {
 		NSString *text = [change objectForKey:NSKeyValueChangeNewKey];
 		if ([text isEqual:[NSNull null]]) {

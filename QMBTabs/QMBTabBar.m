@@ -96,7 +96,7 @@ static float highlightBarHeight = 5.0f;
                                   tab.frame.size.height);
         
         [tab setOrgFrame:frame];
-        frame.origin.x = [self calcXPostionOfTab:tab];
+        frame.origin.x = [self calcXPostionOfTab:tab withIndex:i withTabCount:_items.count];
         [tab setFrame:frame];
 
         [tab setNeedsDisplay];
@@ -130,29 +130,33 @@ static float highlightBarHeight = 5.0f;
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    int index = 0;
     for (QMBTab *tab in _items) {
         CGRect frame = tab.frame;
-        frame.origin.x = [self calcXPostionOfTab:tab];
+        frame.origin.x = [self calcXPostionOfTab:tab withIndex:index withTabCount:_items.count];
         tab.frame = frame;
+        index++;
     }    
 }
 
-- (float) calcXPostionOfTab:(QMBTab *)tab
+- (float) calcXPostionOfTab:(QMBTab *)tab withIndex:(int)index withTabCount:(int)count
 {
-    if (tab.orgFrame.origin.x <= self.contentOffset.x){
+    // stacked tab shift
+    int stackedTabOffset = ((count-1) - index) * 2.0f;
+    if (tab.orgFrame.origin.x <= self.contentOffset.x) {
+        // dont go too far left
         //NSLog(@"1: %f",self.contentOffset.x);
         return self.contentOffset.x;
-    }else if (tab.orgFrame.origin.x + tab.orgFrame.size.width > self.frame.size.width + self.contentOffset.x){
-        return self.frame.size.width - tab.orgFrame.size.width + self.contentOffset.x;
-    }else{
+    } else if (tab.orgFrame.origin.x + tab.orgFrame.size.width > self.frame.size.width + self.contentOffset.x) {
+        return self.frame.size.width - tab.orgFrame.size.width + self.contentOffset.x + stackedTabOffset;
+    } else {
         //NSLog(@"3: %f",tab.orgFrame.origin.x);
-        return tab.orgFrame.origin.x;
+        return tab.orgFrame.origin.x + stackedTabOffset;
     }
 }
 
 - (void) drawRect:(CGRect)rect
 {
-    
     [super drawRect:rect];
         
     self.normalColor = self.appearance.tabBackgroundColorEnabled;

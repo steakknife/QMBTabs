@@ -36,8 +36,10 @@
 @interface QMBTabViewController : UIViewController<QMBTabBarDelegate>
 
 
-/* permit the tab bar to leave a blank space 0 to tabBarX */
-@property (nonatomic) CGFloat tabBarX;
+/* permit the tab bar to leave a blank space on the left*/
+@property (nonatomic) CGFloat tabBarLeftInset;
+/* permit the tab bar to leave a blank space on the right */
+@property (nonatomic) CGFloat tabBarRightInset;
 @property (nonatomic, strong, readonly) NSMutableArray *viewControllers;
 @property (nonatomic, strong) QMBTabsAppearance *appearance;
 @property (nonatomic, assign) UIViewController *selectedViewController;

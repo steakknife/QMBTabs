@@ -54,12 +54,23 @@
     return [[QMBTabsAppearance alloc] init];
 }
 
-- (void) setTabBarX:(CGFloat)tabBarX
+- (void) setTabBarFrame
 {
-    _tabBarX = tabBarX;
     if (self.viewDidLoadCalled) {
-        [_tabBar setFrame:CGRectMake(self.tabBarX, 0, self.view.frame.size.width-self.tabBarX, 44.0f)];
+        [_tabBar setFrame:CGRectMake(self.tabBarLeftInset, 0, self.view.frame.size.width - self.tabBarLeftInset - self.tabBarRightInset, 44.0f)];
     }
+}
+
+- (void) setTabBarLeftInset:(CGFloat)tabBarLeftInset
+{
+    _tabBarLeftInset = tabBarLeftInset;
+    [self setTabBarFrame];
+}
+
+- (void) setTabBarRightInset:(CGFloat)tabBarRightInset
+{
+    _tabBarRightInset = tabBarRightInset;
+    [self setTabBarFrame];
 }
 
 - (void) viewDidLoad
@@ -70,7 +81,7 @@
     
     float width  = self.view.frame.size.width;
     float height = self.view.frame.size.height;
-    self.tabBarX = self.tabBarX;
+    [self setTabBarFrame];
     [self.view addSubview:_tabBar];
     
     UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, _tabBar.frame.size.height, width, height-_tabBar.frame.size.height)];

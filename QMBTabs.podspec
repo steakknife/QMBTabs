@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { "Toni Moeckel" => "tonimoeckel@gmail.com" }
 
-  s.source       = { :git => "https://github.com/steakknife/QMBTabs.git", :tag => "0.2" }
+  s.source       = { :git => "https://github.com/steakknife/QMBTabs.git" }
   s.source_files = "QMBTabs/*.{h,m}"
   s.resources 	 = ["QMBTabs/Resources/*.png"]
 
